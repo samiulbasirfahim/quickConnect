@@ -1,6 +1,6 @@
+import { connection } from "@/lib/connection";
 import { NavigationAction } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
-import { useSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
 import {
   Clipboard,
@@ -11,16 +11,24 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { mediaDevices, MediaStream, RTCView } from "react-native-webrtc";
 
 export default function Room() {
   const [showModal, setShowModal] = useState(false);
   const [pendingNavigation, setPendingNavigation] =
     useState<NavigationAction | null>(null);
 
-  const params = useSearchParams();
-  const roomID = params.get("roomID");
-
   const navigation = useNavigation();
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const streams = await mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+    })();
+  }, []);
 
   useEffect(() => {
     const unsub = navigation.addListener("beforeRemove", (e) => {
@@ -36,8 +44,16 @@ export default function Room() {
     <SafeAreaView>
       <View>
         <Pressable>
-          <Text>{roomID}</Text>
+          <Text>{connection.roomID}</Text>
         </Pressable>
+
+        {localStream && (
+          <RTCView
+            style={{ width: "100%", height: "100%" }}
+            objectFit="cover"
+            streamURL={localStream?.toURL()}
+          />
+        )}
 
         <Modal visible={showModal} animationType="fade" transparent>
           <View className="flex-1 bg-gray-800/30 justify-center items-center">
@@ -47,12 +63,12 @@ export default function Room() {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  Clipboard.setString(String(roomID));
+                  Clipboard.setString(String(connection.roomID));
                 }}
                 className="p-4 bg-gray-400 rounded-lg"
               >
                 <Text className="text-xl font-semibold text-center">
-                  {roomID}
+                  {connection.roomID}
                 </Text>
               </TouchableOpacity>
               <View className="mt-4">

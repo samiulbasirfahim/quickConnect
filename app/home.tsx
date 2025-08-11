@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, View, Image, TouchableHighlight } from "react-native";
 import BG from "../assets/images/home-bg.png";
 import { JoinRoomModal } from "../components/join-room-modal";
+import { connection } from "@/lib/connection";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -11,7 +12,7 @@ export default function Home() {
     <View className="flex-1 justify-start items-center p-4">
       <Image source={BG} style={{ aspectRatio: 1, resizeMode: "contain" }} />
       <TouchableHighlight
-        // onPress={connection?.createRoom}
+        onPress={connection.createRoom}
         underlayColor="#234e52"
         className="bg-teal-400 w-full p-4 flex items-center font-semibold rounded-lg mb-4 aria-pressed:bg-teal-900"
       >

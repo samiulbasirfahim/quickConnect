@@ -1,3 +1,4 @@
+import { connection } from "@/lib/connection";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -14,12 +15,8 @@ export default function Index() {
 
   function handleStart() {
     if (!(username.trim().length > 0)) return;
-    router.push({
-      pathname: "/home",
-      params: {
-        username,
-      },
-    });
+    router.push("/home");
+    connection.setup_socket(username);
   }
 
   return (
