@@ -1,5 +1,4 @@
-import { connection } from "@/lib/connection";
-import { Link } from "expo-router";
+import { connection } from "../lib/connection";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
 import {
@@ -11,7 +10,7 @@ import {
   Modal,
 } from "react-native";
 import BG from "../assets/images/home-bg.png";
-import { JoinRoomModal } from "@/components/join-room-modal";
+import { JoinRoomModal } from "../components/join-room-modal";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
